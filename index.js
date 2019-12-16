@@ -3,9 +3,6 @@ var path = require('path');
 //use express module
 var express = require('express');
 //use hbs view engine
-var session = require('express-session');
-
-
 var hbs = require('hbs');
 //use bodyParser middleware
 var bodyParser = require('body-parser');
@@ -72,8 +69,6 @@ app.post('/login',(req, res) => {
   let sql = "SELECT * FROM user_data WHERE email = '"+username+"' AND password = '"+password+"'";
   let query = conn.query(sql, (err, results) => {
    if (results.length > 0) {
-        req.session.loggedin = true;
-        req.session.username = username;
       res.redirect('/home');
       } else {
         res.send('Incorrect Username and/or Password!');
@@ -87,24 +82,11 @@ app.post('/login',(req, res) => {
   }
 });
 
-app.get('/logout',(req,res) => {
-  req.session.destroy((err) => {
-      if(err) {
-          return console.log(err);
-      }
-      res.redirect('/');
+
+app.get('/home',(req, res) => {  
+    res.render('home',{
+    });
   });
-
-});
-
-app.get('/home', function(req, res) {
-  if (req.session.loggedin) {
-    res.send('Welcome, ' + request.session.username + '!');
-  } else {
-    res.send('Please login to view this page!');
-  }
-  res.end();
-});
 //server listening
 app.listen(8080, () => {
   console.log('Server is running at port 8080');
