@@ -87,14 +87,23 @@ app.post('/login',(req, res) => {
   }
 });
 
+app.get('/logout',(req,res) => {
+  req.session.destroy((err) => {
+      if(err) {
+          return console.log(err);
+      }
+      res.redirect('/');
+  });
 
-app.get('/home', function(request, response) {
-  if (request.session.loggedin) {
-    response.send('Welcome, ' + request.session.username + '!');
+});
+
+app.get('/home', function(req, res) {
+  if (req.session.loggedin) {
+    res.send('Welcome, ' + request.session.username + '!');
   } else {
-    response.send('Please login to view this page!');
+    res.send('Please login to view this page!');
   }
-  response.end();
+  res.end();
 });
 //server listening
 app.listen(8080, () => {
